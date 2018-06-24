@@ -34,7 +34,7 @@ class CrystalSystem:
 
         for criterion, criterion_latex in self.ns_conditions:
             if not criterion:  # If `criterion` evaluates to `False`.
-                print("Condition {0} is not satisfied!".format(criterion_latex), file=outfile)
+                print("Criterion {0} is not satisfied!".format(criterion_latex), file=outfile)
                 flag = False
 
         return flag
@@ -139,7 +139,26 @@ class OrthorhombicSystem(CrystalSystem):
 class MonoclinicSystem(CrystalSystem):
     @property
     def ns_conditions(self):
-        return []
+        _ = self.elastic_matrix
+        c11, c22, c33, c44, c55, c66 = np.diag(_)
+        c12, c13, c15, c23, c25, c35, c46 = _[0, 1], _[0, 2], _[0, 4], _[1, 2], _[1, 4], _[2, 4], _[3, 5]
+        g = c11 * c22 * c33 - c11 * c23 * c23 - c22 * c13 * c13 - c33 * c12 * c12 + 2 * c12 * c13 * c23
+
+        return [
+            (all(_ > 0 for _ in (c11, c22, c33, c44, c55, c66)), "$C_{ii} > 0$"),
+            (c11 + c22 + c33 + 2 * (c12 + c13 + c23) > 0,
+             "$C_{11} + C_{22} + C_{33} + 2 * (C_{12} + C_{13} + C_{23})$"),
+            (c33 * c55 - c35 ** 2 > 0, "$C_{33} * C_{55} - C_{35}^2 > 0$"),
+            (c44 * c66 - c46 ** 2 > 0, "$C_{44} * C_{66} - C_{46}^2 > 0$"),
+            (c22 + c33 - 2 * c23 > 0, "$C_{22} + C_{33} - 2 * C_{23}  > 0$"),
+            (c22 * (c33 * c55 - c35 ** 2) + 2 * c23 * c25 * c35 - c23 ** 2 * c55 - c25 ** 2 * c33 > 0,
+             "$C_{22} * (C_{33} * C_{55} - C_{35}^2) + 2 * C_{23} * C_{25} * C_{35} - c23^2 * c55 - c25^2 * c33> 0$"),
+            (2 * (c15 * c25 * (c33 * c12 - c13 * c23) + c15 * c35 * (c22 * c13 - c12 * c23) + c25 * c35 * (
+                    c11 * c23 - c12 * c13)) - (
+                     c15 * c15 * (c22 * c33 - c23 ^ 2) + c25 * c25 * (c11 * c33 - c13 ^ 2) + c35 * c35 * (
+                     c11 * c22 - c12 ^ 2)) + c55 * g > 0,
+             "The last criterion")
+        ]
 
 
 class TriclinicSystem(CrystalSystem):
