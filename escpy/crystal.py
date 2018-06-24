@@ -122,8 +122,8 @@ class OrthorhombicSystem(CrystalSystem):
     @property
     def ns_conditions(self):
         _ = self.elastic_matrix
-        c11, c12, c13, c22, c23, c33, c44, c55, c66 = _[0, 0], _[0, 1], _[0, 2], _[1, 1], _[1, 2], _[2, 2], _[3, 3], _[
-            4, 4], _[5, 5]
+        c11, c22, c33, c44, c55, c66 = np.diag(_)
+        c12, c13, c23 = _[0, 1], _[0, 2], _[1, 2]
 
         return [
             (c11 > 0, "$C_{11} > 0$"),
