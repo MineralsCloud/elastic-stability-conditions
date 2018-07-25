@@ -14,6 +14,18 @@ from typing import List, Tuple
 
 import numpy as np
 
+# ===================== What can be exported? =====================
+__all__ = [
+    'CrystalSystem',
+    'CubicSystem',
+    'HexagonalSystem',
+    'TetragonalSystem',
+    'RhombohedralSystem',
+    'OrthorhombicSystem',
+    'MonoclinicSystem',
+    'TriclinicSystem'
+]
+
 
 class CrystalSystem:
     def __init__(self, elastic_matrix):
