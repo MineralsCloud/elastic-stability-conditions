@@ -26,7 +26,7 @@ class CrystalSystem:
 
     @property
     @abc.abstractmethod
-    def ns_conditions(self) -> List[Tuple(bool, str)]:
+    def ns_conditions(self) -> List[Tuple[bool, str]]:
         ...
 
     def check_ns_conditions(self, outfile=None) -> bool:
