@@ -258,8 +258,8 @@ class MonoclinicSystem(CrystalSystem):
 class TriclinicSystem(CrystalSystem):
     @property
     def ns_conditions_text(self):
-        return []
+        return None
 
     @property
     def ns_conditions(self):
-        pass
+        return None
