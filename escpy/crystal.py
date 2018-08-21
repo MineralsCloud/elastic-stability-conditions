@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 """
-:mod:`crystal` -- Born elastic stability conditions
-===================================================
-
 .. module
    :platform: Unix, Windows, Mac, Linux
    :synopsis: This module defines the necessary and sufficient conditions (Born elastic stability conditions)

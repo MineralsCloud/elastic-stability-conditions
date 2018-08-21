@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+"""
+.. module:: elasticity
+   :platform: Unix, Windows, Mac, Linux
+   :synopsis: This module can be used to check the validity of input elasticity for 11 Laue classes.
+.. moduleauthor:: Qi Zhang <qz2280@columbia.edu>
+"""
 
 import abc
 
