@@ -43,7 +43,7 @@ class StiffnessMatrix:
         return np.linalg.inv(self._stiffness_matrix)
 
 
-class CrystalSystemStiffnessMatrix(StiffnessMatrix):
+class CubicSystemStiffnessMatrix(StiffnessMatrix):
     @property
     def symmetry_conditions_text(self):
         return [
