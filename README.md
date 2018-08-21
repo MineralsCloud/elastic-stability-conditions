@@ -3,7 +3,7 @@
 A crystalline structure is stable, in the absence of external load and in the harmonic approximation, if and only if
 
 1. all its phonon modes have positive frequencies for all wave vectors (dynamical stability);
-2. the elastic energy is always positive. This condition is called the *elastic stability criterion*. As first noted by Born (See Ref. 2), it is mathematically equivalent to the following necessary and **sufficient stability conditions**:
+2. the elastic energy is always positive. This condition is called the *elastic stability criterion*. As first noted by Born (See Ref. 2), it is mathematically equivalent to the following **necessary and sufficient stability conditions**:
    1. The matrix $\mathrm{ C }$ is definite positive;
    2. all eigenvalues of $\mathrm{ C }$ are positive;
    3. all the leading principal minors of $\mathrm{ C }$ (determinants of its upper-left $k \times k$ submatrix, where $1 \le k \le 6$) are positive, a property known as *Sylvester’s criterion*;
