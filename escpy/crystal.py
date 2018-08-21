@@ -28,13 +28,13 @@ __all__ = [
 
 
 class CrystalSystem:
-    def __init__(self, elastic_matrix):
-        elastic_matrix = np.array(elastic_matrix, dtype=np.float64)
+    def __init__(self, stiffness_matrix):
+        stiffness_matrix = np.array(stiffness_matrix, dtype=np.float64)
 
-        if not elastic_matrix.shape == (6, 6):
+        if not stiffness_matrix.shape == (6, 6):
             raise ValueError("Your *elastic_matrix* must have a shape of (6, 6)!")
 
-        self._elastic_matrix = elastic_matrix
+        self._stiffness_matrix = stiffness_matrix
 
     @property
     @abc.abstractmethod
@@ -57,12 +57,12 @@ class CrystalSystem:
         return flag
 
     @property
-    def elastic_matrix(self):
-        return self._elastic_matrix
+    def stiffness_matrix(self):
+        return self._stiffness_matrix
 
     @property
     def compliance_matrix(self):
-        return np.linalg.inv(self._elastic_matrix)
+        return np.linalg.inv(self._stiffness_matrix)
 
 
 class CubicSystem(CrystalSystem):
@@ -76,7 +76,7 @@ class CubicSystem(CrystalSystem):
 
     @property
     def ns_conditions(self):
-        _ = self._elastic_matrix
+        _ = self._stiffness_matrix
         c11, c12, c44 = _[0, 0], _[0, 1], _[3, 3]
 
         return [
@@ -94,12 +94,11 @@ class HexagonalSystem(CrystalSystem):
             "2 C_{13}^2 < C_{33} (C_{11} + C_{12})",
             "C_{44} > 0",
             "C_{66} > 0"
-
         ]
 
     @property
     def ns_conditions(self):
-        _ = self._elastic_matrix
+        _ = self._stiffness_matrix
         c11, c12, c13, c33, c44 = _[0, 0], _[0, 1], _[0, 2], _[2, 2], _[3, 3]
         c66 = (c11 - c12) / 2
 
@@ -114,7 +113,7 @@ class HexagonalSystem(CrystalSystem):
 class TetragonalSystem(CrystalSystem):
     @property
     def ns_conditions_text(self):
-        if self._elastic_matrix[0, 5] == 0:  # Tetragonal (I) class
+        if self._stiffness_matrix[0, 5] == 0:  # Tetragonal (I) class
             return [
                 "C_{11} > | C_{12} |",
                 "2 C_{13}^2 < C_{33} (C_{11} + C_{12})",
@@ -131,7 +130,7 @@ class TetragonalSystem(CrystalSystem):
 
     @property
     def ns_conditions(self):
-        _ = self._elastic_matrix
+        _ = self._stiffness_matrix
         c11, c12, c13, c16, c33, c44, c66 = _[0, 0], _[0, 1], _[0, 2], _[0, 5], _[2, 2], _[3, 3], _[5, 5]
 
         if c16 == 0:  # Tetragonal (I) class
@@ -153,7 +152,7 @@ class TetragonalSystem(CrystalSystem):
 class RhombohedralSystem(CrystalSystem):
     @property
     def ns_conditions_text(self):
-        if self._elastic_matrix[0, 4] == 0:  # Rhombohedral (I) class
+        if self._stiffness_matrix[0, 4] == 0:  # Rhombohedral (I) class
             return [
                 "C_{11} > | C_{12} |",
                 "C_{44} > 0",
@@ -172,7 +171,7 @@ class RhombohedralSystem(CrystalSystem):
 
     @property
     def ns_conditions(self):
-        _ = self._elastic_matrix
+        _ = self._stiffness_matrix
         c11, c12, c13, c14, c15, c33, c44, c66 = _[0, 0], _[0, 1], _[0, 2], _[0, 3], _[0, 4], _[2, 2], _[3, 3], _[5, 5]
 
         if c15 == 0:  # Rhombohedral (I) class
@@ -207,7 +206,7 @@ class OrthorhombicSystem(CrystalSystem):
 
     @property
     def ns_conditions(self):
-        _ = self._elastic_matrix
+        _ = self._stiffness_matrix
         c11, c22, c33, c44, c55, c66 = np.diag(_)
         c12, c13, c23 = _[0, 1], _[0, 2], _[1, 2]
 
@@ -236,7 +235,7 @@ class MonoclinicSystem(CrystalSystem):
 
     @property
     def ns_conditions(self):
-        _ = self._elastic_matrix
+        _ = self._stiffness_matrix
         c11, c22, c33, c44, c55, c66 = np.diag(_)
         c12, c13, c15, c23, c25, c35, c46 = _[0, 1], _[0, 2], _[0, 4], _[1, 2], _[1, 4], _[2, 4], _[3, 5]
         g = c11 * c22 * c33 - c11 * c23 * c23 - c22 * c13 * c13 - c33 * c12 * c12 + 2 * c12 * c13 * c23
