@@ -27,3 +27,7 @@ class TestElasticities(unittest.TestCase):
 
     def test_validate(self):
         self.assertTrue(self.hexagonal.validate())
+
+
+if __name__ == '__main__':
+    unittest.main()

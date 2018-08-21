@@ -27,3 +27,7 @@ class TestCrystalSystems(unittest.TestCase):
 
     def test_check_ns_conditions(self):
         self.assertTrue(self.hexagonal.check_ns_conditions())
+
+
+if __name__ == '__main__':
+    unittest.main()
