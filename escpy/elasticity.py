@@ -31,6 +31,16 @@ class StiffnessMatrix:
 
         self._stiffness_matrix = stiffness_matrix
 
+        self._eps = 1e-8
+
+    @property
+    def eps(self):
+        return self._eps
+
+    @eps.setter
+    def eps(self, value):
+        self._eps = value
+
     @property
     @abc.abstractmethod
     def symmetry_conditions_text(self):
