@@ -135,17 +135,17 @@ class TetragonalSystem(CrystalSystem):
 
         if c16 == 0:  # Tetragonal (I) class
             return [
-                (c11 > abs(c12)),
-                (2 * c13 ** 2 < c33 * (c11 + c12)),
-                (c44 > 0),
-                (c66 > 0)
+                c11 > abs(c12),
+                2 * c13 ** 2 < c33 * (c11 + c12),
+                c44 > 0,
+                c66 > 0
             ]
 
         return [  # Tetragonal (II) class
-            (c11 > abs(c12)),
-            (2 * c13 ** 2 < c33 * (c11 + c12)),
-            (c44 > 0),
-            (2 * c16 ** 2 < c66 * (c11 - c12))
+            c11 > abs(c12),
+            2 * c13 ** 2 < c33 * (c11 + c12),
+            c44 > 0,
+            2 * c16 ** 2 < c66 * (c11 - c12)
         ]
 
 
