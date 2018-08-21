@@ -4,7 +4,7 @@ import abc
 
 import numpy as np
 
-__all__ =[
+__all__ = [
     'StiffnessMatrix',
     'CubicSystemStiffnessMatrix',
     'HexagonalSystemStiffnessMatrix',
