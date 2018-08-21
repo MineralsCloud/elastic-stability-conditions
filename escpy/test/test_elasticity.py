@@ -16,5 +16,14 @@ class TestElasticities(unittest.TestCase):
                                                                   [0., 0., 0., 0., 59.225, 0.],
                                                                   [0., 0., 0., 0., 0., 85.475]]))
 
+    def test_compliance_matrix(self):
+        np.testing.assert_array_almost_equal(self.hexagonal.compliance_matrix,
+                                             np.array([[0.00435904, -0.00149062, -0.00104479, 0., 0., 0.],
+                                                       [-0.00149062, 0.00435904, -0.00104479, 0., 0., 0.],
+                                                       [-0.00104479, -0.00104479, 0.00424664, 0., 0., 0.],
+                                                       [0., 0., 0., 0.01688476, 0., 0.],
+                                                       [0., 0., 0., 0., 0.01688476, 0.],
+                                                       [0., 0., 0., 0., 0., 0.01169933]]))
+
     def test_validate(self):
         self.assertTrue(self.hexagonal.validate())
