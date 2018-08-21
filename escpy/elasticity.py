@@ -24,7 +24,6 @@ class StiffnessMatrix:
     def symmetry_conditions(self):
         ...
 
-    @abc.abstractmethod
     def validate(self, outfile=None):
         flag = True
 
@@ -60,5 +59,161 @@ class CrystalSystemStiffnessMatrix(StiffnessMatrix):
         return [
             diag[0:3].min() == diag[0:3].max(),
             diag[3:6].min() == diag[3:6].max(),
-            
+            _[0, 1] == _[0, 2] == _[1, 2] == _[1, 0] == _[2, 0] == _[2, 1]
+        ]
+
+
+class HexagonalSystemStiffnessMatrix(StiffnessMatrix):
+    @property
+    def symmetry_conditions_text(self):
+        return [
+            "C_{11} = C_{22}",
+            "C_{44} = C_{55}",
+            "C_{13} = C_{23}",
+            "C_{66} = 1 / 2 (C_{11} - C_{12})"
+        ]
+
+    @property
+    def symmetry_conditions(self):
+        _ = self._stiffness_matrix
+        return [
+            _[0, 0] == _[1, 1],
+            _[3, 3] == _[4, 4],
+            _[0, 2] == _[1, 2],
+            _[5, 5] == 0.5 * (_[0, 0] - _[0, 1])
+        ]
+
+
+class TetragonalSystemStiffnessMatrix(StiffnessMatrix):
+    @property
+    def symmetry_conditions_text(self):
+        if self._stiffness_matrix[0, 5] == 0:  # Tetragonal (I) class
+            return [
+                "C_{11} = C_{22}",
+                "C_{44} = C_{55}",
+                "C_{13} = C_{23}",
+            ]
+
+        return [  # Tetragonal (II) class
+            "C_{11} = C_{22}",
+            "C_{44} = C_{55}",
+            "C_{13} = C_{23}",
+            "C_{16} = -C_{26}"
+        ]
+
+    @property
+    def symmetry_conditions(self):
+        _ = self._stiffness_matrix
+        if self._stiffness_matrix[0, 5] == 0:  # Tetragonal (I) class
+            return [
+                _[0, 0] == _[1, 1],
+                _[3, 3] == _[4, 4],
+                _[0, 2] == _[1, 2],
+            ]
+
+        return [
+            _[0, 0] == _[1, 1],
+            _[3, 3] == _[4, 4],
+            _[0, 2] == _[1, 2],
+            _[0, 5] == -_[1, 5]
+        ]
+
+
+class RhombohedralSystemStiffnessMatrix(StiffnessMatrix):
+    @property
+    def symmetry_conditions_text(self):
+        if self._stiffness_matrix[0, 4] == 0:  # Rhombohedral (I) class
+            return [
+                "C_{11} == C_{22}",
+                "C_{44} = C_{55}",
+                "C_{13} = C_{23}",
+                "C_{66} = 1 / 2 (C_{11} - C_{12})",
+                "C_{14} = -C_{24} = -C_{56}"
+            ]
+
+        return [  # Rhombohedral (II) class
+            "C_{11} == C_{22}",
+            "C_{44} = C_{55}",
+            "C_{13} = C_{23}",
+            "C_{66} = 1 / 2 (C_{11} - C_{12})",
+            "C_{14} = -C_{24} = -C_{56}",
+            "-C_{15} = C_{25} = C_{46}"
+        ]
+
+    @property
+    def symmetry_conditions(self):
+        _ = self._stiffness_matrix
+        if self._stiffness_matrix[0, 4] == 0:  # Rhombohedral (I) class
+            return [
+                _[0, 0] == _[1, 1],
+                _[3, 3] == _[4, 4],
+                _[0, 2] == _[1, 2],
+                _[5, 5] == 0.5 * (_[0, 0] - _[0, 1]),
+                _[0, 3] == -_[1, 3] == -_[4, 5]
+            ]
+
+        return [  # Rhombohedral (II) class
+            _[0, 0] == _[1, 1],
+            _[3, 3] == _[4, 4],
+            _[0, 2] == _[1, 2],
+            _[5, 5] == 0.5 * (_[0, 0] - _[0, 1]),
+            _[0, 3] == -_[1, 3] == -_[4, 5],
+            -_[0, 4] == _[1, 4] == _[3, 5]
+        ]
+
+
+class OrthorhombicSystemStiffnessMatrix(StiffnessMatrix):
+    @property
+    def symmetry_conditions_text(self):
+        return [
+            "C_{14} = C_{24} = C_{34} = 0",
+            "C_{15} = C_{25} = C_{35} = C_{45} = 0",
+            "C_{16} = C_{26} = C_{36} = C_{46} = C_{56} = 0"
+            "There are 9 independent values."
+        ]
+
+    @property
+    def symmetry_conditions(self):
+        _ = self._stiffness_matrix
+        return [
+            np.array_equal(_[0:3, 3], np.full(3, 0)),
+            np.array_equal(_[0:4, 4], np.full(4, 0)),
+            np.array_equal(_[0:5, 5], np.full(5, 0)),
+            len(np.unique(_)) == 9
+        ]
+
+
+class MonoclinicSystemStiffnessMatrix(StiffnessMatrix):
+    @property
+    def symmetry_conditions_text(self):
+        return [
+            "C_{14} = C_{24} = C_{34} = 0",
+            "C_{45} = 0",
+            "C_{16} = C_{26} = C_{36} = C_{56} = 0",
+            "There are 13 independent values."
+        ]
+
+    @property
+    def symmetry_conditions(self):
+        _ = self._stiffness_matrix
+        return [
+            np.array_equal(_[0:3, 3], np.full(3, 0)),
+            _[3, 4] == 0,
+            np.array_equal(_[0:3, 5], np.full(3, 0)) and _[4, 5] == 0,
+            len(np.unique(_)) == 13
+        ]
+
+
+class TriclinicSystemStiffnessMatrix(StiffnessMatrix):
+    @property
+    def symmetry_conditions_text(self):
+        return [
+            "There are 21 independent values."
+        ]
+
+    @property
+    def symmetry_conditions(self):
+        _ = self._stiffness_matrix
+        return [
+            len(np.unique(_)) == 21
         ]
