@@ -32,7 +32,7 @@ class CrystalSystem:
     def __init__(self, stiffness_matrix):
         stiffness_matrix = np.array(stiffness_matrix, dtype=np.float64)
 
-        if not stiffness_matrix.shape == (6, 6):
+        if stiffness_matrix.shape != (6, 6):
             raise ValueError("Your *elastic_matrix* must have a shape of (6, 6)!")
 
         self._stiffness_matrix = stiffness_matrix
