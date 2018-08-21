@@ -24,7 +24,6 @@ class StiffnessMatrix:
     def symmetry_conditions(self):
         ...
 
-    @abc.abstractmethod
     def validate(self, outfile=None):
         flag = True
 
@@ -60,5 +59,5 @@ class CrystalSystemStiffnessMatrix(StiffnessMatrix):
         return [
             diag[0:3].min() == diag[0:3].max(),
             diag[3:6].min() == diag[3:6].max(),
-            
+            _[0, 1] == _[0, 2] == _[1, 2] == _[1, 0] == _[2, 0] == _[2, 1]
         ]
