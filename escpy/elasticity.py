@@ -82,11 +82,13 @@ class CubicSystemStiffnessMatrix(StiffnessMatrix):
     @property
     def symmetry_conditions(self):
         c = self._stiffness_matrix
+        eps = self.eps
         diag = np.diag(c)
+        arr = np.array(c[0, 1], c[0, 2], c[1, 2], c[1, 0], c[2, 0], c[2, 1])
         return [
-            diag[0:3].min() == diag[0:3].max(),
-            diag[3:6].min() == diag[3:6].max(),
-            c[0, 1] == c[0, 2] == c[1, 2] == c[1, 0] == c[2, 0] == c[2, 1]
+            abs(diag[0:3].min() - diag[0:3].max()) < eps,
+            abs(diag[3:6].min() - diag[3:6].max()) < eps,
+            abs(arr.min() - arr.max()) < eps
         ]
 
 
@@ -103,11 +105,12 @@ class HexagonalSystemStiffnessMatrix(StiffnessMatrix):
     @property
     def symmetry_conditions(self):
         c = self._stiffness_matrix
+        eps = self.eps
         return [
-            c[0, 0] == c[1, 1],
-            c[3, 3] == c[4, 4],
-            c[0, 2] == c[1, 2],
-            c[5, 5] == 0.5 * (c[0, 0] - c[0, 1])
+            abs(c[0, 0] - c[1, 1]) < eps,
+            abs(c[3, 3] - c[4, 4]) < eps,
+            abs(c[0, 2] - c[1, 2]) < eps,
+            abs(c[5, 5] - 0.5 * (c[0, 0] - c[0, 1])) < eps
         ]
 
 
@@ -131,18 +134,19 @@ class TetragonalSystemStiffnessMatrix(StiffnessMatrix):
     @property
     def symmetry_conditions(self):
         c = self._stiffness_matrix
+        eps = self.eps
         if self._stiffness_matrix[0, 5] == 0:  # Tetragonal (I) class
             return [
-                c[0, 0] == c[1, 1],
-                c[3, 3] == c[4, 4],
-                c[0, 2] == c[1, 2],
+                abs(c[0, 0] - c[1, 1]) < eps,
+                abs(c[3, 3] - c[4, 4]) < eps,
+                abs(c[0, 2] - c[1, 2]) < eps,
             ]
 
         return [
-            c[0, 0] == c[1, 1],
-            c[3, 3] == c[4, 4],
-            c[0, 2] == c[1, 2],
-            c[0, 5] == -c[1, 5]
+            abs(c[0, 0] - c[1, 1]) < eps,
+            abs(c[3, 3] - c[4, 4]) < eps,
+            abs(c[0, 2] - c[1, 2]) < eps,
+            abs(c[0, 5] + c[1, 5]) < eps
         ]
 
 
@@ -170,22 +174,23 @@ class RhombohedralSystemStiffnessMatrix(StiffnessMatrix):
     @property
     def symmetry_conditions(self):
         c = self._stiffness_matrix
+        eps = self.eps
         if self._stiffness_matrix[0, 4] == 0:  # Rhombohedral (I) class
             return [
-                c[0, 0] == c[1, 1],
-                c[3, 3] == c[4, 4],
-                c[0, 2] == c[1, 2],
-                c[5, 5] == 0.5 * (c[0, 0] - c[0, 1]),
-                c[0, 3] == -c[1, 3] == -c[4, 5]
+                abs(c[0, 0] - c[1, 1]) < eps,
+                abs(c[3, 3] - c[4, 4]) < eps,
+                abs(c[0, 2] - c[1, 2]) < eps,
+                abs(c[5, 5] - 0.5 * (c[0, 0] - c[0, 1])) < eps,
+                abs(c[0, 3] + c[1, 3]) < eps and abs(c[0, 3] + c[4, 5]) < eps
             ]
 
         return [  # Rhombohedral (II) class
-            c[0, 0] == c[1, 1],
-            c[3, 3] == c[4, 4],
-            c[0, 2] == c[1, 2],
-            c[5, 5] == 0.5 * (c[0, 0] - c[0, 1]),
-            c[0, 3] == -c[1, 3] == -c[4, 5],
-            -c[0, 4] == c[1, 4] == c[3, 5]
+            abs(c[0, 0] - c[1, 1]) < eps,
+            abs(c[3, 3] - c[4, 4]) < eps,
+            abs(c[0, 2] - c[1, 2]) < eps,
+            abs(c[5, 5] - 0.5 * (c[0, 0] - c[0, 1])) < eps,
+            abs(c[0, 3] + c[1, 3]) < eps and abs(c[0, 3] + c[4, 5]) < eps,
+            abs(c[1, 4] + c[0, 4]) < eps and abs(c[3, 5] + c[0, 4]) < eps
         ]
 
 
@@ -202,10 +207,11 @@ class OrthorhombicSystemStiffnessMatrix(StiffnessMatrix):
     @property
     def symmetry_conditions(self):
         c = self._stiffness_matrix
+        eps = self.eps
         return [
-            np.array_equal(c[0:3, 3], np.full(3, 0)),
-            np.array_equal(c[0:4, 4], np.full(4, 0)),
-            np.array_equal(c[0:5, 5], np.full(5, 0)),
+            np.allclose(c[0:3, 3], np.full(3, 0), atol=eps),
+            np.allclose(c[0:4, 4], np.full(4, 0), atol=eps),
+            np.allclose(c[0:5, 5], np.full(5, 0), atol=eps),
             len(np.unique(c)) == 9
         ]
 
@@ -223,10 +229,11 @@ class MonoclinicSystemStiffnessMatrix(StiffnessMatrix):
     @property
     def symmetry_conditions(self):
         c = self._stiffness_matrix
+        eps = self.eps
         return [
-            np.array_equal(c[0:3, 3], np.full(3, 0)),
-            c[3, 4] == 0,
-            np.array_equal(c[0:3, 5], np.full(3, 0)) and c[4, 5] == 0,
+            np.allclose(c[0:3, 3], np.full(3, 0), atol=eps),
+            abs(c[3, 4]) < eps,
+            np.allclose(c[0:3, 5], np.full(3, 0), atol=eps) and abs(c[4, 5]) < eps,
             len(np.unique(c)) == 13
         ]
 
