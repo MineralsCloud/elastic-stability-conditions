@@ -17,7 +17,6 @@ import numpy as np
 
 # ===================== What can be exported? =====================
 __all__ = [
-    'CrystalSystem',
     'CubicSystem',
     'HexagonalSystem',
     'TetragonalSystem',
