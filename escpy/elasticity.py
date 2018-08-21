@@ -88,12 +88,12 @@ class CubicSystemStiffnessMatrix(StiffnessMatrix):
     def symmetry_conditions(self):
         c = self._stiffness_matrix
         eps = self.eps
-        diag = np.diag(c)
+        d = np.diag(c)
         arr = np.array(c[0, 1], c[0, 2], c[1, 2], c[1, 0], c[2, 0], c[2, 1])
         return [
-            abs(diag[0:3].min() - diag[0:3].max()) < eps,
-            abs(diag[3:6].min() - diag[3:6].max()) < eps,
-            abs(arr.min() - arr.max()) < eps
+            np.isclose(d[0:3].min(), d[0:3].max(), atol=eps),
+            np.isclose(d[3:6].min(), d[3:6].max(), atol=eps),
+            np.isclose(arr.min(), arr.max(), atol=eps)
         ]
 
 
@@ -112,10 +112,10 @@ class HexagonalSystemStiffnessMatrix(StiffnessMatrix):
         c = self._stiffness_matrix
         eps = self.eps
         return [
-            abs(c[0, 0] - c[1, 1]) < eps,
-            abs(c[3, 3] - c[4, 4]) < eps,
-            abs(c[0, 2] - c[1, 2]) < eps,
-            abs(c[5, 5] - 0.5 * (c[0, 0] - c[0, 1])) < eps
+            np.isclose(c[0, 0], c[1, 1], atol=eps),
+            np.isclose(c[3, 3], c[4, 4], atol=eps),
+            np.isclose(c[0, 2], c[1, 2], atol=eps),
+            np.isclose(c[5, 5], 0.5 * (c[0, 0] - c[0, 1]), atol=eps)
         ]
 
 
@@ -142,16 +142,16 @@ class TetragonalSystemStiffnessMatrix(StiffnessMatrix):
         eps = self.eps
         if self._stiffness_matrix[0, 5] == 0:  # Tetragonal (I) class
             return [
-                abs(c[0, 0] - c[1, 1]) < eps,
-                abs(c[3, 3] - c[4, 4]) < eps,
-                abs(c[0, 2] - c[1, 2]) < eps,
+                np.isclose(c[0, 0], c[1, 1], atol=eps),
+                np.isclose(c[3, 3], c[4, 4], atol=eps),
+                np.isclose(c[0, 2], c[1, 2], atol=eps),
             ]
 
         return [
-            abs(c[0, 0] - c[1, 1]) < eps,
-            abs(c[3, 3] - c[4, 4]) < eps,
-            abs(c[0, 2] - c[1, 2]) < eps,
-            abs(c[0, 5] + c[1, 5]) < eps
+            np.isclose(c[0, 0], c[1, 1], atol=eps),
+            np.isclose(c[3, 3], c[4, 4], atol=eps),
+            np.isclose(c[0, 2], c[1, 2], atol=eps),
+            np.isclose(c[0, 5], -c[1, 5], atol=eps)
         ]
 
 
@@ -182,20 +182,20 @@ class RhombohedralSystemStiffnessMatrix(StiffnessMatrix):
         eps = self.eps
         if self._stiffness_matrix[0, 4] == 0:  # Rhombohedral (I) class
             return [
-                abs(c[0, 0] - c[1, 1]) < eps,
-                abs(c[3, 3] - c[4, 4]) < eps,
-                abs(c[0, 2] - c[1, 2]) < eps,
-                abs(c[5, 5] - 0.5 * (c[0, 0] - c[0, 1])) < eps,
-                abs(c[0, 3] + c[1, 3]) < eps and abs(c[0, 3] + c[4, 5]) < eps
+                np.isclose(c[0, 0], c[1, 1], atol=eps),
+                np.isclose(c[3, 3], c[4, 4], atol=eps),
+                np.isclose(c[0, 2], c[1, 2], atol=eps),
+                np.isclose(c[5, 5], 0.5 * (c[0, 0] - c[0, 1]), atol=eps),
+                np.isclose(c[0, 3], -c[1, 3], atol=eps) and np.isclose(c[0, 3], -c[4, 5], atol=eps)
             ]
 
         return [  # Rhombohedral (II) class
-            abs(c[0, 0] - c[1, 1]) < eps,
-            abs(c[3, 3] - c[4, 4]) < eps,
-            abs(c[0, 2] - c[1, 2]) < eps,
-            abs(c[5, 5] - 0.5 * (c[0, 0] - c[0, 1])) < eps,
-            abs(c[0, 3] + c[1, 3]) < eps and abs(c[0, 3] + c[4, 5]) < eps,
-            abs(c[1, 4] + c[0, 4]) < eps and abs(c[3, 5] + c[0, 4]) < eps
+            np.isclose(c[0, 0], c[1, 1], atol=eps),
+            np.isclose(c[3, 3], c[4, 4], atol=eps),
+            np.isclose(c[0, 2], c[1, 2], atol=eps),
+            np.isclose(c[5, 5], 0.5 * (c[0, 0] - c[0, 1]), atol=eps),
+            np.isclose(c[0, 3], -c[1, 3], atol=eps) and np.isclose(c[0, 3], -c[4, 5], atol=eps),
+            np.isclose(c[1, 4], -c[0, 4], atol=eps) and np.isclose(c[3, 5], -c[0, 4], atol=eps)
         ]
 
 
