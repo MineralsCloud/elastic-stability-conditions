@@ -199,15 +199,10 @@ class RhombohedralSystem(CrystalSystem):
 class OrthorhombicSystem(CrystalSystem):
     @property
     def ns_conditions_str(self):
-        _ = self._elastic_matrix
-        c11, c22, c33, c44, c55, c66 = np.diag(_)
-        c12, c13, c23 = _[0, 1], _[0, 2], _[1, 2]
-
         return [
             "C_{11} > 0",
             "C_{11} C_{22} > C_{12}^2",
-            (c11 * c22 * c33 + 2 * c12 * c13 * c23 > c11 * c23 ** 2 + c22 * c13 ** 2 + c33 * c12 ** 2,
-             "C_{11} C_{22} C_{33} + 2 C_{12} C_{13} C_{23} > C_{11} C_{23}^2 + C_{22} C_{13}^2 + C_{33} C_{12}^2"),
+            "C_{11} C_{22} C_{33} + 2 C_{12} C_{13} C_{23} > C_{11} C_{23}^2 + C_{22} C_{13}^2 + C_{33} C_{12}^2",
             "C_{44} > 0",
             "C_{55} > 0",
             "C_{66} > 0"
