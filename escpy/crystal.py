@@ -85,9 +85,6 @@ class CubicSystem(CrystalSystem):
             c44 > 0
         ]
 
-    def check_symmetry(self):
-        pass
-
 
 class HexagonalSystem(CrystalSystem):
     @property
