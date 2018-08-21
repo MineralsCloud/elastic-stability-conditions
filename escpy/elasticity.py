@@ -7,6 +7,7 @@
 """
 
 import abc
+import warnings
 
 import numpy as np
 
@@ -39,6 +40,10 @@ class StiffnessMatrix:
 
     @eps.setter
     def eps(self, value):
+        if not isinstance(value, (int, float)):
+            raise TypeError("The `eps` attribute has to be a number!")
+        if abs(value) > 1:
+            warnings.warn("The value of `eps` attribute may be too large!", stacklevel=2)
         self._eps = value
 
     @property
