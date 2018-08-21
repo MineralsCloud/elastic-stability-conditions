@@ -38,7 +38,7 @@ class CrystalSystem:
 
     @property
     @abc.abstractmethod
-    def ns_conditions_str(self) -> List[str]:
+    def ns_conditions_text(self) -> List[str]:
         ...
 
     @property
@@ -49,9 +49,9 @@ class CrystalSystem:
     def check_ns_conditions(self, outfile=None) -> bool:
         flag = True
 
-        for criterion, criterion_latex in zip(self.ns_conditions, self.ns_conditions_str):
+        for criterion, criterion_text in zip(self.ns_conditions, self.ns_conditions_text):
             if not criterion:  # If `criterion` evaluates to `False`.
-                print("Criterion {0} is not satisfied!".format(criterion_latex), file=outfile)
+                print("Criterion ${0}$ is not satisfied!".format(criterion_text), file=outfile)
                 flag = False
 
         return flag
@@ -67,7 +67,7 @@ class CrystalSystem:
 
 class CubicSystem(CrystalSystem):
     @property
-    def ns_conditions_str(self):
+    def ns_conditions_text(self):
         return [
             "C_{11} > | C_{12} |",
             "C_{11} + 2 C_{12} > 0",
@@ -91,7 +91,7 @@ class CubicSystem(CrystalSystem):
 
 class HexagonalSystem(CrystalSystem):
     @property
-    def ns_conditions_str(self):
+    def ns_conditions_text(self):
         return [
             "C_{11} > | C_{12} |",
             "2 C_{13}^2 < C_{33} (C_{11} + C_{12})",
@@ -116,7 +116,7 @@ class HexagonalSystem(CrystalSystem):
 
 class TetragonalSystem(CrystalSystem):
     @property
-    def ns_conditions_str(self):
+    def ns_conditions_text(self):
         if self._elastic_matrix[0, 5] == 0:  # Tetragonal (I) class
             return [
                 "C_{11} > | C_{12} |",
@@ -155,7 +155,7 @@ class TetragonalSystem(CrystalSystem):
 
 class RhombohedralSystem(CrystalSystem):
     @property
-    def ns_conditions_str(self):
+    def ns_conditions_text(self):
         if self._elastic_matrix[0, 4] == 0:  # Rhombohedral (I) class
             return [
                 "C_{11} > | C_{12} |",
@@ -198,7 +198,7 @@ class RhombohedralSystem(CrystalSystem):
 
 class OrthorhombicSystem(CrystalSystem):
     @property
-    def ns_conditions_str(self):
+    def ns_conditions_text(self):
         return [
             "C_{11} > 0",
             "C_{11} C_{22} > C_{12}^2",
@@ -226,7 +226,7 @@ class OrthorhombicSystem(CrystalSystem):
 
 class MonoclinicSystem(CrystalSystem):
     @property
-    def ns_conditions_str(self):
+    def ns_conditions_text(self):
         return [
             "C_{ii} > 0",
             "C_{11} + C_{22} + C_{33} + 2 * (C_{12} + C_{13} + C_{23})",
@@ -260,7 +260,7 @@ class MonoclinicSystem(CrystalSystem):
 
 class TriclinicSystem(CrystalSystem):
     @property
-    def ns_conditions_str(self):
+    def ns_conditions_text(self):
         return []
 
     @property
