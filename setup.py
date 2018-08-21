@@ -2,9 +2,11 @@
 
 from distutils.core import setup
 
+import setuptools
+
 setup(
     name='escpy',
-    version='0.0.1',
+    version='0.0.2',
     packages=[
         'escpy'
     ],
