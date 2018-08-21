@@ -15,6 +15,8 @@ from typing import List
 
 import numpy as np
 
+from .elasticity import StiffnessMatrix
+
 # ===================== What can be exported? =====================
 __all__ = [
     'CubicSystem',
@@ -28,13 +30,16 @@ __all__ = [
 
 
 class CrystalSystem:
-    def __init__(self, stiffness_matrix):
-        stiffness_matrix = np.array(stiffness_matrix, dtype=np.float64)
+    def __init__(self, obj):
+        if isinstance(obj, StiffnessMatrix):
+            self._stiffness_matrix = obj.stiffness_matrix
+        else:
+            obj = np.array(obj, dtype=np.float64)
 
-        if stiffness_matrix.shape != (6, 6):
-            raise ValueError("Your *elastic_matrix* must have a shape of (6, 6)!")
+            if obj.shape != (6, 6):
+                raise ValueError("Your *elastic_matrix* must have a shape of (6, 6)!")
 
-        self._stiffness_matrix = stiffness_matrix
+            self._stiffness_matrix = obj
 
     @property
     @abc.abstractmethod
