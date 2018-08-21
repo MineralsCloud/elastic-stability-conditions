@@ -4,6 +4,17 @@ import abc
 
 import numpy as np
 
+__all__ =[
+    'StiffnessMatrix',
+    'CubicSystemStiffnessMatrix',
+    'HexagonalSystemStiffnessMatrix',
+    'TetragonalSystemStiffnessMatrix',
+    'RhombohedralSystemStiffnessMatrix',
+    'OrthorhombicSystemStiffnessMatrix',
+    'MonoclinicSystemStiffnessMatrix',
+    'TriclinicSystemStiffnessMatrix'
+]
+
 
 class StiffnessMatrix:
     def __init__(self, stiffness_matrix):
