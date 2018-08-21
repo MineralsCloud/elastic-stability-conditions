@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-:mod:`` --
-========================================
+:mod:`crystal` -- Born elastic stability conditions
+===================================================
 
 .. module
    :platform: Unix, Windows, Mac, Linux
-   :synopsis:
+   :synopsis: This module defines the necessary and sufficient conditions (Born elastic stability conditions)
+   for 11 Laue classes.
 .. moduleauthor:: Qi Zhang <qz2280@columbia.edu>
 """
 
