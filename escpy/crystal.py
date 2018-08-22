@@ -12,7 +12,7 @@ from typing import List
 
 import numpy as np
 
-from .elasticity import StiffnessMatrix
+from escpy.elasticity import StiffnessMatrix
 
 # ===================== What can be exported? =====================
 __all__ = [
