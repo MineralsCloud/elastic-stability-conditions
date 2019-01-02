@@ -10,7 +10,7 @@ python:
   - "3.8-dev" # 3.8 development branch
 # command to run tests
 script:
-  - pytest
+  - pytest escpy/test/test_*.py
 notifications:
   email:
     - singularitti@outlook.com
