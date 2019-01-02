@@ -8,6 +8,8 @@ python:
   - "3.6"
   - "3.7"
   - "3.8-dev" # 3.8 development branch
+install:
+  - pip install .
 # command to run tests
 script:
   - pytest escpy/test/test_*.py
