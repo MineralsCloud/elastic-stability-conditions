@@ -11,3 +11,6 @@ python:
 # command to run tests
 script:
   - pytest
+notifications:
+  email:
+    - singularitti@outlook.com
