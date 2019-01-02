@@ -1,5 +1,7 @@
 # escpy: Necessary and sufficient elastic stability conditions in various crystal systems
 
+[![Build Status](https://travis-ci.com/MineralsCloud/elastic-stability-conditions.svg?branch=develop)](https://travis-ci.com/MineralsCloud/elastic-stability-conditions)
+
 A crystalline structure is stable, in the absence of external load and in the harmonic approximation, if and only if
 
 1. all its phonon modes have positive frequencies for all wave vectors (dynamical stability);
