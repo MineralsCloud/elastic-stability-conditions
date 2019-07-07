@@ -4,7 +4,7 @@
    :platform: Unix, Windows, Mac, Linux
    :synopsis: This module defines the necessary and sufficient conditions (Born elastic stability conditions)
    for 11 Laue classes.
-.. moduleauthor:: Qi Zhang <qz2280@columbia.edu>
+.. moduleauthor:: Qi Zhang <singularitti@outlook.com>
 """
 
 import abc
